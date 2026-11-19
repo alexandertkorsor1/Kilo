@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\InquiryController;
+use App\Http\Controllers\Api\PhotoController;
+use App\Http\Middleware\EnsureUserIsActive;
+use App\Http\Middleware\EnsureAdmin;
+
+
+// Public portfolio gallery
+Route::get('/photos', [PhotoController::class, 'index'])
+    ->middleware('throttle:60,1');
+
+// Public contact form
+Route::post('/inquiries', [InquiryController::class, 'store'])
+    ->middleware('throttle:5,1');
+
+// Public login
+Route::post('/login', [AuthController::class, 'login'])
+    ->middleware('throttle:5,1');
+
+// Authenticated routes
+    Route::middleware(['auth:sanctum', EnsureUserIsActive::class, EnsureAdmin::class])->group(function () {
+    Route::get('/admin/photos', [PhotoController::class, 'adminIndex']);
+    Route::post('/admin/photos', [PhotoController::class, 'store']);
+    Route::patch('/admin/photos/{photo}', [PhotoController::class, 'update']);
+    Route::post('/admin/photos/{photo}/image', [PhotoController::class, 'replaceImage']);
+    Route::get('/user', [AuthController::class, 'user']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::delete('/admin/photos/{photo}', [PhotoController::class, 'destroy']);
+});
