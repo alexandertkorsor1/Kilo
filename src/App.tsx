@@ -5,6 +5,7 @@ import Hero from '@/components/Hero';
 import Gallery from '@/components/Gallery';
 import About from '@/components/About';
 import Contact from '@/components/Contact';
+import Booking from '@/components/Booking';
 import Footer from '@/components/Footer';
 
 import Login from '@/pages/Login';
@@ -25,6 +26,7 @@ function PublicWebsite() {
         <Hero />
         <Gallery />
         <About />
+        <Booking />
         <Contact />
       </main>
       <Footer />

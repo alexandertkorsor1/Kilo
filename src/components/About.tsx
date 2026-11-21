@@ -1,10 +1,5 @@
-import { aboutImage } from '@/lib/images';
 
-const facts = [
-  { value: '8+', label: 'Years behind the lens' },
-  { value: '120+', label: 'Commissioned shoots' },
-  { value: '14', label: 'Exhibitions featured' },
-];
+import { aboutImage } from '@/lib/images';
 
 export default function About() {
   return (
@@ -13,34 +8,30 @@ export default function About() {
         <div className="overflow-hidden rounded-sm">
           <img
             src={aboutImage}
-            alt="Arnav Mehta at work, framed in warm dramatic light"
+            alt="Photography featured in the Kilo Photographer portfolio"
             loading="lazy"
             className="aspect-[4/5] w-full object-cover"
           />
         </div>
+
         <div>
-          <h2 className="font-display text-4xl text-stone-50">About the photographer</h2>
+          <h2 className="font-display text-4xl text-stone-50">
+            About Kilo Photographer
+          </h2>
+
           <p className="mt-6 leading-relaxed text-stone-300">
-            I'm Kilo, a photographer based in Bengaluru, India. I work
-            across portrait, landscape, street and wedding photography — always
-            chasing honest light and unguarded moments.
+            Kilo Photographer is a photography portfolio celebrating the art
+            of capturing meaningful moments, places, and people.
           </p>
+
           <p className="mt-4 leading-relaxed text-stone-300">
-            My prints and commissions have appeared in galleries across India.
-            When I'm not shooting, I teach weekend workshops on natural-light
-            portraiture.
+            Explore a collection of portrait, landscape, street, and wedding
+            photography, each offering a different perspective through the
+            lens.
           </p>
-          <dl className="mt-8 grid grid-cols-3 gap-6">
-            {facts.map((f) => (
-              <div key={f.label}>
-                <dt className="sr-only">{f.label}</dt>
-                <dd className="font-display text-3xl text-amber-400">{f.value}</dd>
-                <dd className="mt-1 text-xs text-stone-400">{f.label}</dd>
-              </div>
-            ))}
-          </dl>
-          <p className="mt-6 text-sm text-stone-500">
-            Note: biography details are placeholders awaiting final client copy.
+
+          <p className="mt-6 text-sm text-stone-400">
+            Every photograph tells a story. Discover yours through the gallery.
           </p>
         </div>
       </div>

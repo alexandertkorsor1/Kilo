@@ -56,7 +56,7 @@ export default function Login() {
           to="/"
           className="mb-10 block text-center font-display text-xl tracking-widest text-stone-50"
         >
-          ARNAV<span className="text-amber-400">.</span>PHOTO
+          KILO<span className="text-amber-400">.</span>PHOTOGRAPHER
         </Link>
 
         <section className="rounded-sm border border-stone-800 bg-stone-900 p-8 shadow-xl">
@@ -66,7 +66,7 @@ export default function Login() {
             </div>
 
             <h1 className="font-display text-3xl text-stone-50">
-              Staff Login
+              Administrator Login
             </h1>
 
             <p className="mt-2 text-sm text-stone-400">

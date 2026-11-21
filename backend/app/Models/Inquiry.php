@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 
 class Inquiry extends Model
 {
@@ -18,5 +18,16 @@ class Inquiry extends Model
         'email',
         'subject',
         'message',
+        'is_read',
+        'status',
+        'updated_at',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'is_read' => 'boolean',
+            'updated_at' => 'datetime',
+        ];
+    }
 }

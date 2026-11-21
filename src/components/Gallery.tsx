@@ -13,6 +13,21 @@ const categories: Category[] = [
   'Wedding',
 ];
 
+function resolvePhotoSrc(src: string): string {
+  if (!src) return '';
+  if (
+    src.startsWith('http://') ||
+    src.startsWith('https://') ||
+    src.startsWith('data:') ||
+    src.startsWith('blob:')
+  ) {
+    return src;
+  }
+  const base = import.meta.env.BASE_URL || '/';
+  const cleanSrc = src.startsWith('/') ? src.slice(1) : src;
+  return `${base}${cleanSrc}`;
+}
+
 function GalleryImage({
   photo,
   eager,
@@ -24,10 +39,11 @@ function GalleryImage({
 
   return (
     <img
-      src={photo.src}
+      src={resolvePhotoSrc(photo.src)}
       alt={photo.alt}
       loading={eager ? 'eager' : 'lazy'}
       onLoad={() => setLoaded(true)}
+      onError={() => setLoaded(true)}
       className={`h-full w-full object-cover transition-opacity duration-500 ${
         loaded ? 'opacity-100' : 'opacity-0'
       }`}
@@ -210,7 +226,7 @@ export default function Gallery() {
             onClick={(event) => event.stopPropagation()}
           >
             <img
-              src={visible[lightbox].src}
+              src={resolvePhotoSrc(visible[lightbox].src)}
               alt={visible[lightbox].alt}
               className="max-h-[80vh] w-auto rounded-sm object-contain"
             />
