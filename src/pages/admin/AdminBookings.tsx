@@ -91,12 +91,12 @@ export default function AdminBookings() {
 
     try {
       const data = await getAdminBookings({
-        search,
-        status,
-        date: date || undefined,
-        page,
-        per_page: 15,
-      });
+  search,
+  status: status || undefined,
+  date: date || undefined,
+  page,
+  per_page: 15,
+});
 
       setResult(data);
 
