@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Contracts\BookingDateLock;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\BookingSetting;
@@ -35,7 +36,8 @@ class BookingController extends Controller
      */
     public function store(
         Request $request,
-        BookingAvailabilityService $availability
+        BookingAvailabilityService $availability,
+        BookingDateLock $dateLock
     ): JsonResponse {
         $validated = $request->validate([
             'customer_name' => ['required', 'string', 'max:120'],
@@ -50,9 +52,10 @@ class BookingController extends Controller
 
         $booking = DB::transaction(function () use (
             $validated,
-            $availability
+            $availability,
+            $dateLock
         ) {
-            $this->lockBookingDate($validated['session_date']);
+            $dateLock->lock($validated['session_date']);
 
             $settings = BookingSetting::query()->findOrFail(1);
 
@@ -136,7 +139,8 @@ class BookingController extends Controller
     public function update(
         Request $request,
         Booking $booking,
-        BookingAvailabilityService $availability
+        BookingAvailabilityService $availability,
+        BookingDateLock $dateLock
     ): JsonResponse {
         $validated = $request->validate([
             'status' => [
@@ -160,7 +164,8 @@ class BookingController extends Controller
         $updated = DB::transaction(function () use (
             $validated,
             $booking,
-            $availability
+            $availability,
+            $dateLock
         ) {
             $booking = Booking::query()
                 ->lockForUpdate()
@@ -203,7 +208,7 @@ class BookingController extends Controller
                 sort($dates);
 
                 foreach ($dates as $date) {
-                    $this->lockBookingDate($date);
+                    $dateLock->lock($date);
                 }
 
                 if ($willReserve) {
@@ -245,16 +250,17 @@ class BookingController extends Controller
     /**
      * Admin: delete a booking.
      */
-    public function destroy(Booking $booking): JsonResponse
+    public function destroy(
+        Booking $booking,
+        BookingDateLock $dateLock
+    ): JsonResponse
     {
-        DB::transaction(function () use ($booking) {
+        DB::transaction(function () use ($booking, $dateLock) {
             $booking = Booking::query()
                 ->lockForUpdate()
                 ->findOrFail($booking->id);
 
-            $this->lockBookingDate(
-                $booking->session_date->toDateString()
-            );
+            $dateLock->lock($booking->session_date->toDateString());
 
             $booking->delete();
         });
@@ -264,17 +270,4 @@ class BookingController extends Controller
         ]);
     }
 
-    /**
-     * Serialize booking operations for a particular business-local date.
-     *
-     * PostgreSQL transaction-level advisory locks are automatically
-     * released when the transaction commits or rolls back.
-     */
-    private function lockBookingDate(string $date): void
-    {
-        DB::select(
-            'SELECT pg_advisory_xact_lock(183562451, hashtext(?))',
-            [$date]
-        );
-    }
 }
