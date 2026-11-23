@@ -55,6 +55,7 @@ class BookingController extends Controller
             $availability,
             $dateLock
         ) {
+            $dateLock->lockSchedulingChanges();
             $dateLock->lock($validated['session_date']);
 
             $settings = BookingSetting::query()->findOrFail(1);
@@ -167,6 +168,8 @@ class BookingController extends Controller
             $availability,
             $dateLock
         ) {
+            $dateLock->lockSchedulingChanges();
+
             $booking = Booking::query()
                 ->lockForUpdate()
                 ->findOrFail($booking->id);
@@ -256,6 +259,8 @@ class BookingController extends Controller
     ): JsonResponse
     {
         DB::transaction(function () use ($booking, $dateLock) {
+            $dateLock->lockSchedulingChanges();
+
             $booking = Booking::query()
                 ->lockForUpdate()
                 ->findOrFail($booking->id);
