@@ -37,7 +37,7 @@ jobs:
 
       - name: Build frontend
         env:
-          VITE_API_BASE_URL: https://horses-casinos-restoration-dramatically.trycloudflare.com
+          VITE_API_BASE_URL: https://william-miniature-empire-urls.trycloudflare.com
         run: npm run build
 
       - name: Upload GitHub Pages artifact
