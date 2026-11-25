@@ -19,7 +19,10 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:5173'],
+    'allowed_origins' => [
+        'http://localhost:5173',
+        'https://alexandertkorsor1.github.io',
+    ],
 
     'allowed_origins_patterns' => [],
 

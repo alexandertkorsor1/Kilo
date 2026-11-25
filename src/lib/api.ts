@@ -1,7 +1,11 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/+$/, '');
 
-if (!API_BASE_URL) {
-  throw new Error('VITE_API_BASE_URL is not configured.');
+function getApiBaseUrl(): string {
+  if (!API_BASE_URL) {
+    throw new Error('VITE_API_BASE_URL is not configured.');
+  }
+
+  return API_BASE_URL;
 }
 
 export interface BookingAvailability {
@@ -82,7 +86,7 @@ function getCookie(name: string): string | null {
 }
 
 export async function initializeCsrf(): Promise<void> {
-  const response = await fetch(`${API_BASE_URL}/sanctum/csrf-cookie`, {
+  const response = await fetch(`${getApiBaseUrl()}/sanctum/csrf-cookie`, {
     method: 'GET',
     credentials: 'include',
     headers: {
@@ -130,7 +134,7 @@ export async function apiRequest<T>(
     headers.set('X-XSRF-TOKEN', csrfToken);
   }
 
-  const response = await fetch(`${API_BASE_URL}${path}`, {
+  const response = await fetch(`${getApiBaseUrl()}${path}`, {
     ...options,
     method,
     headers,
